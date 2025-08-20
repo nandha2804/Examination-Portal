@@ -1,0 +1,41 @@
+{% extends 'exam/adminbase.html' %}
+{% block content %}
+<div class="container">
+  <h2 class="text-center">View Seating Allocations</h2>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Course</th>
+                  <th>Room Number</th>
+                  <th>Seat Number</th>
+                  <th>Exam Date</th>
+                  <th>Hall Ticket</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for allocation in allocations %}
+                <tr>
+                  <td>{{allocation.student.get_name}}</td>
+                  <td>{{allocation.exam.course_name}}</td>
+                  <td>{{allocation.room_number}}</td>
+                  <td>{{allocation.seat_number}}</td>
+                  <td>{{allocation.exam_date|date:"d-m-Y H:i"}}</td>
+                  <td>{{allocation.hall_ticket_number}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

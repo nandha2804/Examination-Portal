@@ -1,0 +1,56 @@
+{% extends 'exam/adminbase.html' %}
+{% block content %}
+<div class="container">
+  <h2 class="text-center">Allocate Seats for {{course.course_name}}</h2>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>Exam Date</label>
+              <input type="date" name="exam_date" class="form-control" required>
+            </div>
+            <div class="form-group mt-3">
+              <label>Exam Time</label>
+              <input type="time" name="exam_time" class="form-control" required>
+            </div>
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary">Generate Seating Arrangement</button>
+              <a href="{% url 'admin-seating-allocation' %}" class="btn btn-secondary ml-2">Back</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div class="card mt-4">
+        <div class="card-body">
+          <h4>Students ({{students.count}})</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for student in students %}
+                <tr>
+                  <td>{{student.get_name}}</td>
+                  <td>{{student.mobile}}</td>
+                  <td>{{student.address}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

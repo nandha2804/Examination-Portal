@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect,reverse
 from . import forms,models
 from django.db.models import Sum
 from django.contrib.auth.models import Group
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from django.db.models import Q
 from django.core.mail import send_mail
 from teacher import models as TMODEL
@@ -298,4 +298,58 @@ def contactus_view(request):
             return render(request, 'exam/contactussuccess.html')
     return render(request, 'exam/contactus.html', {'form':sub})
 
+@login_required(login_url='adminlogin')
+def admin_seating_allocation_view(request):
+    courses = models.Course.objects.all()
+    return render(request, 'exam/admin_seating_allocation.html', {'courses': courses})
 
+@login_required(login_url='adminlogin')
+def allocate_seats_view(request, course_id):
+    course = models.Course.objects.get(id=course_id)
+    students = SMODEL.Student.objects.all()
+    
+    if request.method == 'POST':
+        exam_date = request.POST.get('exam_date')
+        exam_time = request.POST.get('exam_time')
+        exam_datetime = datetime.strptime(f"{exam_date} {exam_time}", "%Y-%m-%d %H:%M")
+        
+        # Simple room allocation logic - 20 students per room
+        room_capacity = 20
+        current_room = 1
+        current_seat = 1
+        
+        for student in students:
+            # Check if allocation already exists
+            existing = models.SeatingAllocation.objects.filter(student=student, exam=course).first()
+            if not existing:
+                allocation = models.SeatingAllocation(
+                    student=student,
+                    exam=course,
+                    room_number=f"R{current_room}",
+                    seat_number=str(current_seat),
+                    exam_date=exam_datetime
+                )
+                allocation.save()
+                
+                current_seat += 1
+                if current_seat > room_capacity:
+                    current_room += 1
+                    current_seat = 1
+                    
+        return redirect('admin-view-seating')
+        
+    return render(request, 'exam/allocate_seats.html', {
+        'course': course,
+        'students': students
+    })
+
+@login_required(login_url='adminlogin')
+def admin_view_seating_view(request):
+    allocations = models.SeatingAllocation.objects.all().order_by('exam', 'room_number', 'seat_number')
+    return render(request, 'exam/admin_view_seating.html', {'allocations': allocations})
+
+@login_required(login_url='student/student-dashboard')
+def view_hall_ticket_view(request):
+    student = SMODEL.Student.objects.get(user_id=request.user.id)
+    allocations = models.SeatingAllocation.objects.filter(student=student).order_by('exam_date')
+    return render(request, 'student/view_hall_ticket.html', {'allocations': allocations})

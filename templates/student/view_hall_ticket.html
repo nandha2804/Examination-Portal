@@ -1,0 +1,60 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+<div class="container">
+  <h2 class="text-center">My Hall Tickets</h2>
+  <hr>
+  <div class="row">
+    {% for allocation in allocations %}
+    <div class="col-md-6 mt-3">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Hall Ticket - {{allocation.exam.course_name}}</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-bordered">
+                <tr>
+                  <th>Student Name</th>
+                  <td>{{allocation.student.get_name}}</td>
+                </tr>
+                <tr>
+                  <th>Hall Ticket Number</th>
+                  <td>{{allocation.hall_ticket_number}}</td>
+                </tr>
+                <tr>
+                  <th>Course</th>
+                  <td>{{allocation.exam.course_name}}</td>
+                </tr>
+                <tr>
+                  <th>Room Number</th>
+                  <td>{{allocation.room_number}}</td>
+                </tr>
+                <tr>
+                  <th>Seat Number</th>
+                  <td>{{allocation.seat_number}}</td>
+                </tr>
+                <tr>
+                  <th>Exam Date & Time</th>
+                  <td>{{allocation.exam_date|date:"d-m-Y H:i"}}</td>
+                </tr>
+              </table>
+              <div class="text-center">
+                <p class="text-muted">Please arrive 30 minutes before exam time.</p>
+                <p class="text-danger">Bring this hall ticket and a valid ID to the exam.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12">
+      <div class="alert alert-info">
+        No hall tickets available yet. Your seating will be allocated before the exam.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

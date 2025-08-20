@@ -11,13 +11,10 @@ urlpatterns = [
     path('student/',include('student.urls')),
     
 
-
     path('',views.home_view,name=''),
     path('logout', LogoutView.as_view(template_name='exam/logout.html'),name='logout'),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
-
-
 
     path('adminclick', views.adminclick_view),
     path('adminlogin', LoginView.as_view(template_name='exam/adminlogin.html'),name='adminlogin'),
@@ -50,5 +47,8 @@ urlpatterns = [
     path('view-question/<int:pk>', views.view_question_view,name='view-question'),
     path('delete-question/<int:pk>', views.delete_question_view,name='delete-question'),
 
-
-] 
+    # Seating Allocation URLs
+    path('admin-seating-allocation', views.admin_seating_allocation_view,name='admin-seating-allocation'),
+    path('allocate-seats/<int:course_id>', views.allocate_seats_view,name='allocate-seats'),
+    path('admin-view-seating', views.admin_view_seating_view,name='admin-view-seating'),
+]
