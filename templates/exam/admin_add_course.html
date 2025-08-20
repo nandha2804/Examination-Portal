@@ -7,14 +7,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <style>
-       <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  a:link {
-        text-decoration: none;
-      }
-    
+    a:link {
+      text-decoration: none;
+    }
   </style>
 </head>
 <h2 style="text-align:center;">Add Course</h2>
@@ -23,6 +18,15 @@
     <div class="form-group">
       <label for="course_name">Course Name</label>
       {% render_field courseForm.course_name class="form-control" placeholder="Example: Software Engineering" %}
+
+      <label for="batch_name">Batch Name</label>
+      {% render_field courseForm.batch_name class="form-control" placeholder="Example: Batch A" %}
+
+      <label for="batch_year">Batch Year</label>
+      {% render_field courseForm.batch_year class="form-control" placeholder="Example: 2025" %}
+
+      <label for="assigned_teacher">Assign Teacher</label>
+      {% render_field courseForm.assigned_teacher class="form-control" %}
 
       <label for="question_number">Total Question</label>
       {% render_field courseForm.question_number class="form-control" placeholder="Example: 50" %}

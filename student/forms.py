@@ -14,5 +14,10 @@ class StudentUserForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model=models.Student
-        fields=['address','mobile','profile_pic']
+        fields=['course', 'address','mobile','profile_pic']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Only show courses that have a batch assigned
+        self.fields['course'].queryset = QMODEL.Course.objects.exclude(batch_name__isnull=True).exclude(batch_name__exact='')
+        self.fields['course'].required = True

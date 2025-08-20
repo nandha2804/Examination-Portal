@@ -1,0 +1,48 @@
+{% extends 'teacher/teacherbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Create New Exam</h2>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="course">Course</label>
+                            {% render_field examForm.course class="form-control" %}
+                            <small class="form-text text-muted">Only your assigned courses are shown</small>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="exam_name">Exam Name</label>
+                            {% render_field examForm.exam_name class="form-control" placeholder="Example: Mid Term Examination" %}
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="exam_date">Exam Date</label>
+                            {% render_field examForm.exam_date class="form-control" %}
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="start_time">Start Time</label>
+                            {% render_field examForm.start_time class="form-control" %}
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="duration">Duration (in minutes)</label>
+                            {% render_field examForm.duration class="form-control" placeholder="Example: 180" %}
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Create Exam</button>
+                            <a href="{% url 'teacher-dashboard' %}" class="btn btn-secondary ml-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

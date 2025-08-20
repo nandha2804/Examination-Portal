@@ -13,7 +13,28 @@ class TeacherSalaryForm(forms.Form):
 class CourseForm(forms.ModelForm):
     class Meta:
         model=models.Course
-        fields=['course_name','question_number','total_marks']
+        fields=['course_name', 'batch_name', 'batch_year', 'assigned_teacher', 'question_number', 'total_marks']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Only show approved teachers
+        from teacher.models import Teacher
+        self.fields['assigned_teacher'].queryset = Teacher.objects.filter(status=True)
+
+class ExamForm(forms.ModelForm):
+    class Meta:
+        model=models.Exam
+        fields=['course', 'exam_name', 'exam_date', 'start_time', 'duration']
+        widgets = {
+            'exam_date': forms.DateInput(attrs={'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def __init__(self, teacher=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if teacher:
+            # Only show courses assigned to this teacher
+            self.fields['course'].queryset = models.Course.objects.filter(assigned_teacher=teacher)
 
 class QuestionForm(forms.ModelForm):
     
