@@ -67,7 +67,7 @@
         .form-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            gap: 4.5rem;
             margin-bottom: 1.5rem;
         }
 
@@ -207,10 +207,10 @@
                         <label for="profile_pic">Profile Picture</label>
                         {% render_field teacherForm.profile_pic|attr:'required:true' class="form-control" %}
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="salary">Salary</label>
                         {% render_field teacherForm.salary|attr:'required:true' class="form-control" placeholder="Enter salary" %}
-                    </div>
+                    </div> -->
                 </div>
 
                 <button type="submit" class="btn btn-success">Create Account</button>
