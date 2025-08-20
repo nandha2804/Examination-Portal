@@ -2,129 +2,200 @@
 {% load widget_tweaks %}
 {% block content %}
 
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <style type="text/css">
-      a:link {
-        text-decoration: none;
-      }
-  
-      .order-card {
-        color: rgb(255, 255, 255);
-      }
-  
-      .bg-c-blue {
-        background: #04868f;
-      }
-  
-      .bg-c-green {
-        background:#4C51BF;
-      }
-  
-      .bg-c-yellow {
-        background: #F56565;
-      }
-  
-      .bg-c-pink {
-        background:#3186ca;
-      }
-  
-  
-      .card {
-        
-        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        margin-bottom: 30px;
-        -webkit-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-      }
-  
-      .card .card-block {
-        padding: 25px;
-      }
-  
-      .order-card i {
-        font-size: 26px;
-      }
-  
-      .f-left {
-        float: left;
-      }
-  
-      .f-right {
-        float: right;
-      }
-      header {
-      left: 0px;
-      right: 0px;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-blue: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            --gradient-red: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            --gradient-green: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .dashboard-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.9;
+            z-index: 0;
+        }
+
+        .students-card::before {
+            background: var(--gradient-purple);
+        }
+
+        .teachers-card::before {
+            background: var(--gradient-blue);
+        }
+
+        .courses-card::before {
+            background: var(--gradient-green);
+        }
+
+        .questions-card::before {
+            background: var(--gradient-red);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            opacity: 0.9;
+            margin-right: 1rem;
+        }
+
+        .card-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 0.5rem 0 0;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                gap: 1rem;
+            }
+
+            .card-number {
+                font-size: 2rem;
+            }
+        }
     </style>
-  </head>
-<br><br>
+</head>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 col-xl-3">
-        <a href="admin-view-student" style="text-decoration: none;color:white;">
-        <div class="card bg-c-pink order-card">
-          <div class="card-block">
-            <h6 class="m-b-20">Registered Students </h6>
-            <h2 class="text-right"><i class="fas fa-user-graduate f-left"></i><span>{{total_student}}</span></h2>
-          </div>
-        </div>
-      </a>
-      </div>
-      
-  
-      <div class="col-md-4 col-xl-3">
-        <a href="admin-view-teacher" style="text-decoration: none;color:white;">
-        <div class="card bg-c-green order-card">
-          <div class="card-block">
-            <h6 class="m-b-20">Total Teachers </h6>
-            <h2 class="text-right"><i class="fas fa-chalkboard-teacher f-left"></i><span>{{total_teacher}}</span></h2>
-          </div>
-        </div>
-      </a>
-      </div>
-  
-      <div class="col-md-4 col-xl-3">
-        <a href="admin-view-course" style="text-decoration: none;color:white;">
-        <div class="card bg-c-blue order-card">
-          <div class="card-block">
-            <h6 class="m-b-20">Total Courses</h6>
-           <h2 class="text-right"><i class="fas fa-book f-left"></i><span>{{total_course}}</span></h2> 
-          </div>
-        </div>
-      </a>
-      </div>
-  
-      <div class="col-md-4 col-xl-3">
-        <a href="admin-view-question" style="text-decoration: none;color:white;">
-        <div class="card bg-c-yellow order-card">
-          <div class="card-block">
-            <h6 class="m-b-20">Available Questions</h6>
-            <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>
-          </div>
-        </div>
-      </a>
-      </div>
+<div class="dashboard-container">
+    <div class="stats-grid">
+        <a href="admin-view-student" class="stat-card students-card" data-aos="fade-up">
+            <div class="card-content">
+                <div class="card-header">
+                    <i class="fas fa-user-graduate card-icon"></i>
+                    <h3 class="card-title">Students</h3>
+                </div>
+                <h2 class="card-number">{{total_student}}</h2>
+                <p class="card-description">Total registered students</p>
+            </div>
+        </a>
 
-      
+        <a href="admin-view-teacher" class="stat-card teachers-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-content">
+                <div class="card-header">
+                    <i class="fas fa-chalkboard-teacher card-icon"></i>
+                    <h3 class="card-title">Teachers</h3>
+                </div>
+                <h2 class="card-number">{{total_teacher}}</h2>
+                <p class="card-description">Total active teachers</p>
+            </div>
+        </a>
+
+        <a href="admin-view-course" class="stat-card courses-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-content">
+                <div class="card-header">
+                    <i class="fas fa-book card-icon"></i>
+                    <h3 class="card-title">Courses</h3>
+                </div>
+                <h2 class="card-number">{{total_course}}</h2>
+                <p class="card-description">Available courses</p>
+            </div>
+        </a>
+
+        <a href="admin-view-question" class="stat-card questions-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="card-content">
+                <div class="card-header">
+                    <i class="fas fa-question-circle card-icon"></i>
+                    <h3 class="card-title">Questions</h3>
+                </div>
+                <h2 class="card-number">{{total_question}}</h2>
+                <p class="card-description">Total questions in bank</p>
+            </div>
+        </a>
     </div>
-  </div>
+</div>
 
-
-<br><br><br><br><br><br><br><br><br><br>
-
-<script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-
+<!-- AOS Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+</script>
 
 {% endblock content %}

@@ -1,60 +1,111 @@
 {% extends 'student/studentbase.html' %}
 {% block content %}
-<div class="container">
-  <h2 class="text-center">My Hall Tickets</h2>
-  <hr>
-  <div class="row">
-    {% for allocation in allocations %}
-    <div class="col-md-6 mt-3">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          <h4 class="mb-0">Hall Ticket - {{allocation.exam.course_name}}</h4>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-bordered">
-                <tr>
-                  <th>Student Name</th>
-                  <td>{{allocation.student.get_name}}</td>
-                </tr>
-                <tr>
-                  <th>Hall Ticket Number</th>
-                  <td>{{allocation.hall_ticket_number}}</td>
-                </tr>
-                <tr>
-                  <th>Course</th>
-                  <td>{{allocation.exam.course_name}}</td>
-                </tr>
-                <tr>
-                  <th>Room Number</th>
-                  <td>{{allocation.room_number}}</td>
-                </tr>
-                <tr>
-                  <th>Seat Number</th>
-                  <td>{{allocation.seat_number}}</td>
-                </tr>
-                <tr>
-                  <th>Exam Date & Time</th>
-                  <td>{{allocation.exam_date|date:"d-m-Y H:i"}}</td>
-                </tr>
-              </table>
-              <div class="text-center">
-                <p class="text-muted">Please arrive 30 minutes before exam time.</p>
-                <p class="text-danger">Bring this hall ticket and a valid ID to the exam.</p>
-              </div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% if hall_ticket %}
+            <div class="card shadow" id="hallTicket">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3>EXAMINATION HALL TICKET</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <h4>Student Details</h4>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>{{ hall_ticket.student.get_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Roll Number:</th>
+                                    <td>{{ hall_ticket.student.roll_no }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Course:</th>
+                                    <td>{{ hall_ticket.exam.course.course_name }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <img src="{{ hall_ticket.student.profile_pic.url }}" alt="Student Photo" 
+                                 class="img-thumbnail" style="max-width: 150px;">
+                        </div>
+                    </div>
+
+                    <h4>Examination Details</h4>
+                    <table class="table">
+                        <tr>
+                            <th>Exam Name:</th>
+                            <td>{{ hall_ticket.exam.exam_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date:</th>
+                            <td>{{ hall_ticket.exam.exam_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Time:</th>
+                            <td>{{ hall_ticket.exam.start_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>Duration:</th>
+                            <td>{{ hall_ticket.exam.duration }} minutes</td>
+                        </tr>
+                        <tr>
+                            <th>Room Number:</th>
+                            <td>{{ hall_ticket.room_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Seat Number:</th>
+                            <td>{{ hall_ticket.seat_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Hall Ticket Number:</th>
+                            <td>{{ hall_ticket.hall_ticket_number }}</td>
+                        </tr>
+                    </table>
+
+                    <div class="alert alert-info">
+                        <strong>Important Instructions:</strong>
+                        <ul class="mb-0">
+                            <li>Please arrive 30 minutes before the examination start time</li>
+                            <li>Bring your ID card and this hall ticket</li>
+                            <li>No electronic devices allowed in the examination hall</li>
+                            <li>Follow all examination rules and regulations</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button onclick="window.print()" class="btn btn-primary">
+                        <i class="fas fa-print"></i> Print Hall Ticket
+                    </button>
+                </div>
             </div>
-          </div>
+            {% else %}
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h4>No hall ticket found for upcoming examinations.</h4>
+                    <p>Please contact your administrator if you think this is an error.</p>
+                </div>
+            </div>
+            {% endif %}
         </div>
-      </div>
     </div>
-    {% empty %}
-    <div class="col-md-12">
-      <div class="alert alert-info">
-        No hall tickets available yet. Your seating will be allocated before the exam.
-      </div>
-    </div>
-    {% endfor %}
-  </div>
 </div>
-{% endblock content %}
+
+<style>
+@media print {
+    .navbar, .btn, footer {
+        display: none !important;
+    }
+    #hallTicket {
+        border: 1px solid #000;
+    }
+    .card-header {
+        background-color: #fff !important;
+        color: #000 !important;
+        border-bottom: 2px solid #000;
+    }
+}
+</style>
+{% endblock %}

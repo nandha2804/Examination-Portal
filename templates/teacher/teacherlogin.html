@@ -3,103 +3,146 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
-    <style media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login - Online Examination Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+      :root {
+        --primary-gradient: linear-gradient(135deg, #4299e1 0%, #4c51bf 100%);
+        --primary-color: #4299e1;
+        --text-primary: #2d3748;
+        --surface-color: #ffffff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    background: #304352;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to left, #d7d2cc, #304352);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to left, #d7d2cc, #304352); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+        background: var(--primary-gradient);
+        display: flex;
+        flex-direction: column;
+      }
 
+      .login-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
 
-}
+      .box {
+        width: 100%;
+        max-width: 420px;
+        padding: 2.5rem;
+        background: var(--surface-color);
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
 
-.box {
-    width: 500px;
-    padding: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background: #212529;
-    border-radius: 15px;
-    text-align: center;
-    transition: 0.25s;
-    margin-top: 100px
-}
+      .box h1 {
+        color: var(--text-primary);
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
 
-.box input[type="text"],
-.box input[type="password"] {
-    border: 0;
-    background: none;
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    border: 2px solid #838383;
-    padding: 10px 10px;
-    width: 250px;
-    outline: none;
-    color: white;
-    border-radius: 0px;
-    transition: 0.25s
-}
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
 
-.box h1 {
-    color: white;
-    font-weight: 500
-}
+      .box input[type="text"],
+      .box input[type="password"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        background: #f8fafc;
+        font-family: 'Inter', sans-serif;
+      }
 
-.box input[type="text"]:focus,
-.box input[type="password"]:focus {
-    width: 300px;
-    border-color: #4caf50;
-}
+      .box input[type="text"]:focus,
+      .box input[type="password"]:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        outline: none;
+      }
 
-.box input[type="submit"] {
-    border: 0;
-    background: #4caf50;
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    padding: 14px 40px;
-    outline: none;
-    color: white;
-    border-radius: 0px;
-    transition: 0.25s;
-    cursor: pointer
-}
+      .box input[type="submit"] {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-.box input[type="submit"]:hover {
-    background: #347736;
-}
+      .box input[type="submit"]:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(66, 153, 225, 0.2);
+      }
 
+      .brand-logo {
+        margin-bottom: 2rem;
+      }
 
+      .brand-logo i {
+        font-size: 2.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      @media (max-width: 480px) {
+        .box {
+          padding: 2rem;
+        }
+
+        .box h1 {
+          font-size: 1.5rem;
+        }
+      }
     </style>
   </head>
   <body>
     {% include "exam/navbar.html" %}
-    <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <form class="box" method="post" >
-                    {% csrf_token %}
-                    <h1>Teacher Login Panel</h1>
-
-                     {% render_field form.username class="form-control" autocomplete="off" placeholder="Username" %}
-                     {% render_field form.password class="form-control" autocomplete="off" placeholder="Password" %}
-
-                     <input type="submit" name="" value="Login">
-
-                </form>
-            </div>
+    
+    <div class="login-container">
+      <form class="box" method="post">
+        {% csrf_token %}
+        <div class="brand-logo">
+          <i class="fas fa-chalkboard-teacher"></i>
         </div>
+        <h1>Teacher Login</h1>
+        
+        <div class="input-group">
+          {% render_field form.username class="form-control" autocomplete="off" placeholder="Username" %}
+        </div>
+        
+        <div class="input-group">
+          {% render_field form.password class="form-control" autocomplete="off" placeholder="Password" %}
+        </div>
+
+        <input type="submit" value="Sign In">
+      </form>
     </div>
-</div>
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br>
-{% include "exam/footer.html" %}
+
+    {% include "exam/footer.html" %}
   </body>
 </html>

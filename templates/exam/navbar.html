@@ -1,64 +1,319 @@
 <!DOCTYPE html>
 {% load static %}
+{% load custom_filters %}
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --surface-color: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --accent-color: #4c51bf;
+            --sidebar-width: 280px;
+        }
 
-  <style type="text/css">
-    .bs-example {
-      margin: 0px;
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding-top: 70px;
+            background-color: #f8fafc;
+        }
 
-    }
-    .bg-dark {
-    background-color: #212529!important;
-}
-    .navbar-brand {
-      font-size: 20px;
-      font-family: sans-serif;
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-gradient);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            height: 70px;
+        }
 
-    }
-  </style>
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 0 1.5rem;
+            text-decoration: none;
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            opacity: 1;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: var(--sidebar-width);
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: calc(-1 * var(--sidebar-width));
+            background: white;
+            overflow-x: hidden;
+            transition: transform 0.3s ease-out;
+            padding-top: 70px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar.active {
+            transform: translateX(var(--sidebar-width));
+        }
+
+        .sidebar a {
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-radius: 0 30px 30px 0;
+            margin: 0.25rem 0;
+        }
+
+        .sidebar a i {
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(76, 81, 191, 0.1);
+            color: var(--accent-color);
+            padding-left: 2rem;
+        }
+
+        .sidebar a:hover i {
+            transform: scale(1.1);
+        }
+
+        .menu-toggle {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 1rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .user-profile i {
+            font-size: 1.1rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: #e53e3e;
+            color: white;
+            border-radius: 30px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+
+            .sidebar.active {
+                transform: translateX(100%);
+            }
+
+            .user-profile span {
+                display: none;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-
-
-  <div class="bs-example">
-    <nav class="navbar navbar-expand-md  navbar-dark fixed-top" style="background-color: #212529;">
-    <a style="color: #ffffff;text-decoration: none; " href="/"><font face = "verdana" size =" 5">Examination Portal</font><br /></a>  
-      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-        <div class="navbar-nav">
-    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="menu-toggle" onclick="toggleSidebar()" title="Menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <a href="/" class="navbar-brand">Online Examination Portal</a>
+            <div class="nav-right">
+                {% if request.user.is_authenticated %}
+                <div class="user-profile" title="{{ request.user.username }}">
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ request.user.username }}</span>
+                </div>
+                {% endif %}
+            </div>
         </div>
-
-        <div class="navbar-nav">
-          <a style="padding-left: 30px;" href="/" class="nav-item nav-link"> Home</a>
-          <a href="/teacher/teacherclick" class="nav-item nav-link">Teacher</a>
-          <a href="/student/studentclick" class="nav-item nav-link">Student</a>
-          <a href="/adminclick" class="nav-item nav-link">Admin</a>
-          <a href="/contactus" class="nav-item nav-link">Contact</a>
-          
-        </div>
-
-
-
-
-      </div>
     </nav>
-  </div>
 
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_staff %}
+                <a href="/admin-dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin-teacher" class="nav-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Teachers</span>
+                </a>
+                <a href="/admin-student" class="nav-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Students</span>
+                </a>
+                <a href="/admin-course" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Courses</span>
+                </a>
+                <a href="/admin-question" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Questions</span>
+                </a>
+                <a href="/admin-seating-allocation" class="nav-item">
+                    <i class="fas fa-chair"></i>
+                    <span>Seating</span>
+                </a>
+            {% elif request.user|has_group:"TEACHER" %}
+                <a href="/teacher/teacher-dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/teacher/teacher-exam" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Exams</span>
+                </a>
+                <a href="/teacher/teacher-question" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Questions</span>
+                </a>
+            {% elif request.user|has_group:"STUDENT" %}
+                <a href="/student/student-dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/student/student-exam" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Exams</span>
+                </a>
+                <a href="/student/view-hall-ticket" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Hall Ticket</span>
+                </a>
+                <a href="/student/student-marks" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Results</span>
+                </a>
+            {% endif %}
+            <a href="/logout" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        {% else %}
+            <a href="/" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="/adminclick" class="nav-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Admin</span>
+            </a>
+            <a href="/teacherclick" class="nav-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teacher</span>
+            </a>
+            <a href="/studentclick" class="nav-item">
+                <i class="fas fa-user-graduate"></i>
+                <span>Student</span>
+            </a>
+        {% endif %}
+    </div>
 
+    <script>
+        const sidebar = document.getElementById("mySidebar");
+        let sidebarOpen = false;
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle("active");
+            sidebarOpen = !sidebarOpen;
+        }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const menuToggle = document.querySelector(".menu-toggle");
+            if (sidebarOpen && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+                toggleSidebar();
+            }
+        });
+
+        // Add smooth transition effect when closing
+        sidebar.addEventListener('transitionend', function() {
+            if (!sidebarOpen) {
+                sidebar.style.visibility = 'hidden';
+            }
+        });
+
+        sidebar.addEventListener('transitionstart', function() {
+            sidebar.style.visibility = 'visible';
+        });
+    </script>
 </body>
-
 </html>

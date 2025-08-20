@@ -1,42 +1,128 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en" dir="ltr">
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Online Examination System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --surface-color: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --accent-color: #38b2ac;
+        }
 
-  <style media="screen">
-    .jumbotron {
-      margin-top: 0px;
-      margin-bottom: 0px;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--primary-gradient);
+        }
 
-    .jumbotron h1 {
-      text-align: center;
-    }
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
 
-  </style>
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-out;
+        }
 
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            margin: 0.5rem;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
 </head>
-
 <body>
+    {% include "exam/navbar.html" %}
+    
+    <div class="container">
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h1 class="title">Student Portal</h1>
+            <p class="description">Join our examination platform to access your courses, take exams, and track your progress with ease.</p>
+            <a href="/studentlogin" class="btn btn-primary">Login</a>
+            <a href="/student/studentsignup" class="btn btn-secondary">Register</a>
+        </div>
+    </div>
 
-  {% include "exam/navbar.html" %}
-  <br><br>
-  <div class="jumbotron" style="margin-bottom:0px;">
-    <h1 class="display-4">Hello Student,</h1>
-    <p class="lead">and Welcome to Online Examination System</p>
-    <hr class="my-4">
-    <p>Select any of them to access into the system</p>
-    <p class="lead">
-      <a class="btn btn-primary " href="studentsignup" style="border-radius: 0%;" role="button">Create Your Account</a>
-      <a class="btn btn-success " href="studentlogin" style="border-radius: 0%;" role="button">Login Now</a>
-    </p>
-    <br><br><br><br><br><br>
-  </div>
- 
-  {% include "exam/footer.html" %}
+    {% include "exam/footer.html" %}
 </body>
-
 </html>

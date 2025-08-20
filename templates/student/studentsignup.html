@@ -1,76 +1,219 @@
 <!DOCTYPE html>
 {% load widget_tweaks %}
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Online Examination System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
-
-        form{
-           margin: 50px; 
-          
+        :root {
+            --primary-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --surface-color: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --accent-color: #38b2ac;
         }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            width: 100%;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-success {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* File input styling */
+        input[type="file"] {
+            padding: 0.5rem;
+            border: 2px dashed #e2e8f0;
+            border-radius: 10px;
+            background: #f7fafc;
+            cursor: pointer;
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     {% include "exam/navbar.html" %}
- 
+    
+    <div class="container">
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h1 class="title">Student Registration</h1>
+            
+            <form method="POST" autocomplete="off" enctype="multipart/form-data">
+                {% csrf_token %}
 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        {% render_field userForm.first_name|attr:'required:true' class="form-control" placeholder="Enter your first name" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        {% render_field userForm.last_name|attr:'required:true' class="form-control" placeholder="Enter your last name" %}
+                    </div>
+                </div>
 
-<br><br><br>
-<div class="container">
-  <h3 style="text-align: center;">Student Signup Form</h3>
-<form method="POST" autocomplete="off" enctype="multipart/form-data">
-    {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mobile">Contact Number</label>
+                        {% render_field studentForm.mobile|attr:'required:true' class="form-control" placeholder="Enter your contact number" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        {% render_field studentForm.address|attr:'required:true' class="form-control" placeholder="Enter your address" %}
+                    </div>
+                </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="first_name">First Name</label>
-          {% render_field userForm.first_name|attr:'required:true'  class="form-control" placeholder="First Name" %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        {% render_field userForm.username|attr:'required:true' class="form-control" placeholder="Choose a username" %}
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        {% render_field userForm.password|attr:'required:true' class="form-control" placeholder="Choose a password" type="password" %}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="profile_pic">Profile Picture</label>
+                        {% render_field studentForm.profile_pic|attr:'required:true' class="form-control" %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Create Account</button>
+            </form>
         </div>
-        <div class="form-group col-md-6">
-          <label for="last_name">Last Name</label>
-          {% render_field userForm.last_name|attr:'required:true'  class="form-control" placeholder="Last Name" %}
-        </div>
-      </div>
+    </div>
 
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="mobile">Contact</label>
-          {% render_field studentForm.mobile|attr:'required:true'  class="form-control" placeholder="Contact Number" %}
-        </div>
-        <div class="form-group col-md-6">
-          <label for="address">Address</label>
-          {% render_field studentForm.address|attr:'required:true'  class="form-control" placeholder="Address" %}
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="username">Username</label>
-          {% render_field userForm.username|attr:'required:true'  class="form-control" placeholder="username" %}
-        </div>
-        <div class="form-group col-md-6">
-          <label for="inputPassword4">Password</label>
-          {% render_field userForm.password|attr:'required:true'  class="form-control" placeholder="password" %}
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label for="profile_pic">Profile Picture</label>
-          {% render_field studentForm.profile_pic|attr:'required:true' class="form-control" placeholder="" %}
-        </div>
-        
-      </div>
-
-
-    <button type="submit" class="btn btn-success" style="border-radius: 0%;">Sign Up</button>
-  </form>
-</div>
-
-
-<br><br>
-{% include "exam/footer.html" %}
-  </body>
+    {% include "exam/footer.html" %}
+</body>
 </html>

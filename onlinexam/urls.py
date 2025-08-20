@@ -7,11 +7,13 @@ from django.conf.urls.static import static
 urlpatterns = [
    
     path('admin/', admin.site.urls),
+    path('',views.home_view,name=''),
+    path('studentclick', views.studentclick_view),
+    path('teacherclick', views.teacherclick_view),
+    path('teacherlogin', LoginView.as_view(template_name='teacher/teacherlogin.html'),name='teacherlogin'),
+    path('studentlogin', LoginView.as_view(template_name='student/studentlogin.html'),name='studentlogin'),
     path('teacher/',include('teacher.urls')),
     path('student/',include('student.urls')),
-    
-
-    path('',views.home_view,name=''),
     path('logout', LogoutView.as_view(template_name='exam/logout.html'),name='logout'),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
@@ -49,6 +51,7 @@ urlpatterns = [
 
     # Seating Allocation URLs
     path('admin-seating-allocation', views.admin_seating_allocation_view,name='admin-seating-allocation'),
-    path('allocate-seats/<int:course_id>', views.allocate_seats_view,name='allocate-seats'),
     path('admin-view-seating', views.admin_view_seating_view,name='admin-view-seating'),
+    path('edit-seating-allocation', views.edit_seating_allocation_view,name='edit-seating-allocation'),
+    path('delete-seating-allocation', views.delete_seating_allocation_view,name='delete-seating-allocation'),
 ]

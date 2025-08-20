@@ -1,30 +1,62 @@
 {% extends 'exam/adminbase.html' %}
 {% block content %}
-<div class="container">
-  <h2 class="text-center">Seating Allocation</h2>
-  <hr>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <h4>Select Course for Seating Allocation</h4>
-          <div class="row">
-            {% for course in courses %}
-            <div class="col-md-4 mt-3">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">{{course.course_name}}</h5>
-                  <p>Total Questions: {{course.question_number}}</p>
-                  <p>Total Marks: {{course.total_marks}}</p>
-                  <a href="{% url 'allocate-seats' course.id %}" class="btn btn-primary">Allocate Seats</a>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
+<div class="container mt-4">
+    <h2 class="text-center">Seating Allocation Management</h2>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h4>Bulk Seating Allocation</h4>
         </div>
-      </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Select Exam</label>
+                    {{ form.exam }}
+                </div>
+                <div class="form-group">
+                    <label>Number of Rooms</label>
+                    {{ form.room_count }}
+                </div>
+                <div class="form-group">
+                    <label>Seats per Room</label>
+                    {{ form.seats_per_room }}
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Seating Arrangement</button>
+            </form>
+        </div>
     </div>
-  </div>
+
+    {% if allocations %}
+    <div class="card shadow">
+        <div class="card-header">
+            <h4>Current Seating Arrangements</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Room Number</th>
+                            <th>Seat Number</th>
+                            <th>Hall Ticket Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for allocation in allocations %}
+                        <tr>
+                            <td>{{ allocation.student.get_name }}</td>
+                            <td>{{ allocation.room_number }}</td>
+                            <td>{{ allocation.seat_number }}</td>
+                            <td>{{ allocation.hall_ticket_number }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
-{% endblock content %}
+{% endblock %}
