@@ -1,0 +1,90 @@
+{% extends 'exam/adminbase.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">All Exam Results</h4>
+            <div class="btn-group">
+                <a href="{% url 'admin-view-pending-results' %}" class="btn btn-light">
+                    <i class="fas fa-clock"></i> View Pending Results
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if results %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Exam</th>
+                            <th>Course</th>
+                            <th>Marks</th>
+                            <th>Status</th>
+                            <th>Evaluated By</th>
+                            <th>Approved By</th>
+                            <th>Published</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.student.get_name }}</td>
+                            <td>{{ result.exam.exam_name }}</td>
+                            <td>{{ result.exam.course.course_name }}</td>
+                            <td>{{ result.marks }}/{{ result.exam.course.total_marks }}</td>
+                            <td>
+                                <span class="badge badge-{{ result.status|lower }}">
+                                    {{ result.status }}
+                                </span>
+                            </td>
+                            <td>{{ result.evaluated_by.get_name }}</td>
+                            <td>
+                                {% if result.approved_by %}
+                                    {{ result.approved_by.get_full_name }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if result.exam.is_results_published %}
+                                    <span class="badge badge-success">Published</span>
+                                {% else %}
+                                    <span class="badge badge-warning">Not Published</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not result.exam.is_results_published %}
+                                    <form method="post" action="{% url 'publish-results' result.exam.id %}" 
+                                          style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-sm"
+                                                onclick="return confirm('Are you sure you want to publish results for {{ result.exam.exam_name }}?')">
+                                            <i class="fas fa-upload"></i> Publish
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                No results found.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.badge-pending { background-color: #fbd38d; color: #744210; }
+.badge-approved { background-color: #9ae6b4; color: #22543d; }
+.badge-rejected { background-color: #feb2b2; color: #822727; }
+</style>
+
+{% endblock content %}

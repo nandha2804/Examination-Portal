@@ -1,0 +1,84 @@
+{% extends 'exam/base.html' %}
+
+{% block title %}{{ error_code }} Error{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .error-content {
+        text-align: center;
+        padding: 2rem;
+        max-width: 600px;
+    }
+    
+    .error-code {
+        font-size: 6rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        line-height: 1;
+    }
+    
+    .error-message {
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+    }
+    
+    .error-suggestion {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+    }
+    
+    .return-button {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+    
+    .return-button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+        .error-code {
+            font-size: 4rem;
+        }
+        
+        .error-message {
+            font-size: 1.25rem;
+        }
+        
+        .error-suggestion {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-content">
+        <div class="error-code">{{ error_code }}</div>
+        <h1 class="error-message">{{ error_message }}</h1>
+        <p class="error-suggestion">{{ suggestion }}</p>
+        <a href="{{ return_url }}" class="return-button">
+            {{ return_text }}
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'exam/base.html' %}
+{% block title %}Student Login{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <h2 class="mb-4">Student Login</h2>
+            <div class="card">
+                <img src="{% static 'image/student.png' %}" class="card-img-top mx-auto mt-3" style="width: 150px;" alt="Student Icon">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome Student</h5>
+                    <p class="card-text">Access your courses, take exams, and view your results.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'studentlogin' %}" class="btn btn-primary">
+                            Login to Student Panel
+                        </a>
+                        <a href="{% url 'studentsignup' %}" class="btn btn-outline-primary">
+                            Register as New Student
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <p class="mb-0">Student Features:</p>
+                    <ul class="list-unstyled">
+                        <li>View Available Exams</li>
+                        <li>Take Online Tests</li>
+                        <li>Check Results</li>
+                        <li>Download Hall Tickets</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

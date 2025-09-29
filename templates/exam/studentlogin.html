@@ -30,10 +30,12 @@
                             {{ form.password }}
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mt-4">Login</button>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'studentsignup' %}" class="text-decoration-none">
+                                Don't have an account? Sign up here
+                            </a>
+                        </div>
                     </form>
-                    <div class="text-center mt-3">
-                        <a href="{% url 'studentsignup' %}" class="text-primary">New Student? Register here</a>
-                    </div>
                 </div>
             </div>
         </div>

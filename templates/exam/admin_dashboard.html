@@ -143,7 +143,7 @@
 
 <div class="dashboard-container">
     <div class="stats-grid">
-        <a href="admin-view-student" class="stat-card students-card" data-aos="fade-up">
+        <a href="{% url 'admin-view-student' %}" class="stat-card students-card" data-aos="fade-up">
             <div class="card-content">
                 <div class="card-header">
                     <i class="fas fa-user-graduate card-icon"></i>
@@ -154,7 +154,7 @@
             </div>
         </a>
 
-        <a href="admin-view-teacher" class="stat-card teachers-card" data-aos="fade-up" data-aos-delay="100">
+        <a href="{% url 'admin-view-teacher' %}" class="stat-card teachers-card" data-aos="fade-up" data-aos-delay="100">
             <div class="card-content">
                 <div class="card-header">
                     <i class="fas fa-chalkboard-teacher card-icon"></i>
@@ -165,7 +165,7 @@
             </div>
         </a>
 
-        <a href="admin-view-course" class="stat-card courses-card" data-aos="fade-up" data-aos-delay="200">
+        <a href="{% url 'admin-view-course' %}" class="stat-card courses-card" data-aos="fade-up" data-aos-delay="200">
             <div class="card-content">
                 <div class="card-header">
                     <i class="fas fa-book card-icon"></i>
@@ -176,7 +176,7 @@
             </div>
         </a>
 
-        <a href="admin-view-question" class="stat-card questions-card" data-aos="fade-up" data-aos-delay="300">
+        <a href="{% url 'admin-view-question' %}" class="stat-card questions-card" data-aos="fade-up" data-aos-delay="300">
             <div class="card-content">
                 <div class="card-header">
                     <i class="fas fa-question-circle card-icon"></i>

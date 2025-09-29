@@ -1,0 +1,140 @@
+{% extends 'teacher/teacherbase.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <h2 class="mb-4">View Exam Results</h2>
+
+    {% if results %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Exam</th>
+                            <th>Course</th>
+                            <th>Marks</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.student.get_name }}</td>
+                            <td>{{ result.exam.exam_name }}</td>
+                            <td>{{ result.exam.course.course_name }}</td>
+                            <td>{{ result.marks }}/{{ result.exam.course.total_marks }}</td>
+                            <td>
+                                <span class="badge badge-{{ result.status|lower }}">
+                                    {{ result.status }}
+                                </span>
+                            </td>
+                            <td>{{ result.date|date:"d M Y, h:i A" }}</td>
+                            <td>
+                                {% if result.status == 'PENDING' %}
+                                <button 
+                                    class="btn btn-primary btn-sm edit-result" 
+                                    data-result-id="{{ result.id }}"
+                                    data-marks="{{ result.marks }}"
+                                    data-remarks="{{ result.remarks|default:'' }}"
+                                >
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No results found.
+    </div>
+    {% endif %}
+</div>
+
+<!-- Edit Result Modal -->
+<div class="modal fade" id="editResultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Result</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editResultForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="resultId">
+                    <div class="form-group">
+                        <label>Marks</label>
+                        <input type="number" class="form-control" id="marks" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea class="form-control" id="remarks" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveResult">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge-pending { background-color: #fbd38d; color: #744210; }
+.badge-approved { background-color: #9ae6b4; color: #22543d; }
+.badge-rejected { background-color: #feb2b2; color: #822727; }
+</style>
+
+<script>
+$(document).ready(function() {
+    $('.edit-result').click(function() {
+        const resultId = $(this).data('result-id');
+        const marks = $(this).data('marks');
+        const remarks = $(this).data('remarks');
+        
+        $('#resultId').val(resultId);
+        $('#marks').val(marks);
+        $('#remarks').val(remarks);
+        
+        $('#editResultModal').modal('show');
+    });
+
+    $('#saveResult').click(function() {
+        const resultId = $('#resultId').val();
+        const marks = $('#marks').val();
+        const remarks = $('#remarks').val();
+
+        $.ajax({
+            url: `/teacher/update-result/${resultId}/`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                marks: marks,
+                remarks: remarks
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                }
+            },
+            error: function() {
+                alert('Error updating result');
+            }
+        });
+    });
+});
+</script>
+
+{% endblock content %}

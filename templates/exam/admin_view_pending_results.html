@@ -1,0 +1,53 @@
+{% extends 'exam/adminbase.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Pending Results for Approval</h4>
+        </div>
+        <div class="card-body">
+            {% if results %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Exam</th>
+                            <th>Course</th>
+                            <th>Marks</th>
+                            <th>Evaluated By</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.student.get_name }}</td>
+                            <td>{{ result.exam.exam_name }}</td>
+                            <td>{{ result.exam.course.course_name }}</td>
+                            <td>{{ result.marks }}/{{ result.exam.course.total_marks }}</td>
+                            <td>{{ result.evaluated_by.get_name }}</td>
+                            <td>{{ result.date|date:"d M Y, h:i A" }}</td>
+                            <td>
+                                <a href="{% url 'admin-result-actions' result.id %}" 
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-check-circle"></i> Review
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                No pending results found for approval.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

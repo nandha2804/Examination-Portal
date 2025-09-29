@@ -1,4 +1,6 @@
-{% extends 'exam/navbar.html' %}
+{% extends 'exam/base.html' %}
+{% block title %}Teacher Login{% endblock %}
+
 {% block content %}
 
 <div class="container mt-5">
@@ -6,7 +8,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header text-center">
-                    <h3>Student Login</h3>
+                    <h3>Teacher Login</h3>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -30,10 +32,12 @@
                             {{ form.password }}
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mt-4">Login</button>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'teachersignup' %}" class="text-decoration-none">
+                                Don't have an account? Sign up here
+                            </a>
+                        </div>
                     </form>
-                    <div class="text-center mt-3">
-                        <a href="{% url 'studentsignup' %}" class="text-primary">New Student? Register here</a>
-                    </div>
                 </div>
             </div>
         </div>

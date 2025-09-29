@@ -1,0 +1,34 @@
+{% extends 'exam/base.html' %}
+{% block title %}Admin Login{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <h2 class="mb-4">Admin Login</h2>
+            <div class="card">
+                <img src="{% static 'image/admin.png' %}" class="card-img-top mx-auto mt-3" style="width: 150px;" alt="Admin Icon">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome Admin</h5>
+                    <p class="card-text">Manage the entire examination system, users, and notifications.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'adminlogin' %}" class="btn btn-primary">
+                            Login to Admin Panel
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <p class="mb-0">Admin Features:</p>
+                    <ul class="list-unstyled">
+                        <li>User Management</li>
+                        <li>Course Management</li>
+                        <li>Exam Control</li>
+                        <li>System Notifications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

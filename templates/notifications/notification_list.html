@@ -1,0 +1,83 @@
+{% extends request.user.role|add:"/"|add:request.user.role|lower|add:"base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Notifications</h4>
+            <button class="btn btn-sm btn-outline-primary" onclick="markAllAsRead()">Mark All as Read</button>
+        </div>
+        <div class="card-body">
+            {% if notifications %}
+                <div class="list-group">
+                    {% for notification in notifications %}
+                        <div class="list-group-item {% if not notification.is_read %}list-group-item-primary{% endif %}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-1">{{ notification.title }}</h6>
+                                <small>{{ notification.created_at|timesince }} ago</small>
+                            </div>
+                            <p class="mb-1">{{ notification.message }}</p>
+                            {% if notification.related_link %}
+                                <a href="{{ notification.related_link }}" class="btn btn-sm btn-link">View Details</a>
+                            {% endif %}
+                            {% if not notification.is_read %}
+                                <button class="btn btn-sm btn-outline-secondary" onclick="markAsRead({{ notification.id }})">
+                                    Mark as Read
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center">
+                    <p>No notifications yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function markAsRead(notificationId) {
+    fetch(`/notifications/mark-read/${notificationId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    }).then(response => response.json())
+      .then(data => {
+          if (data.status === 'success') {
+              location.reload();
+          }
+      });
+}
+
+function markAllAsRead() {
+    fetch('/notifications/mark-all-read/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    }).then(response => response.json())
+      .then(data => {
+          if (data.status === 'success') {
+              location.reload();
+          }
+      });
+}
+
+// Update unread count every minute
+setInterval(() => {
+    fetch('/notifications/unread-count/')
+        .then(response => response.json())
+        .then(data => {
+            const badge = document.getElementById('notification-badge');
+            if (badge) {
+                badge.textContent = data.count || '';
+                badge.style.display = data.count ? 'inline' : 'none';
+            }
+        });
+}, 60000);
+</script>
+{% endblock %}

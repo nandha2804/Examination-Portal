@@ -1,0 +1,45 @@
+<div class="dropdown-menu dropdown-menu-end notification-dropdown" style="min-width: 300px;">
+    <div class="dropdown-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Notifications</h6>
+        <a href="{% url 'notifications:list' %}" class="text-muted">View All</a>
+    </div>
+    <div class="dropdown-divider"></div>
+    {% if notifications %}
+        {% for notification in notifications %}
+            <a class="dropdown-item {% if not notification.read %}unread{% endif %}" href="#">
+                <div>
+                    <strong>{{ notification.get_notification_type_display }}</strong>
+                    <small class="float-end text-muted">{{ notification.created_at|timesince }} ago</small>
+                </div>
+                <div class="text-truncate">{{ notification.message }}</div>
+            </a>
+            {% if not forloop.last %}
+                <div class="dropdown-divider"></div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="dropdown-item text-center">
+            No new notifications
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.notification-dropdown {
+    max-height: 400px;
+    overflow-y: auto;
+}
+.notification-dropdown .unread {
+    background-color: #f8f9fa;
+}
+.notification-dropdown .dropdown-item:hover {
+    background-color: #e9ecef;
+}
+.notification-dropdown .dropdown-header {
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.75rem 1rem;
+}
+</style>

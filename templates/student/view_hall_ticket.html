@@ -1,111 +1,156 @@
 {% extends 'student/studentbase.html' %}
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            {% if hall_ticket %}
-            <div class="card shadow" id="hallTicket">
-                <div class="card-header text-center bg-primary text-white">
-                    <h3>EXAMINATION HALL TICKET</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-8">
-                            <h4>Student Details</h4>
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th>Name:</th>
-                                    <td>{{ hall_ticket.student.get_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Roll Number:</th>
-                                    <td>{{ hall_ticket.student.roll_no }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Course:</th>
-                                    <td>{{ hall_ticket.exam.course.course_name }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <img src="{{ hall_ticket.student.profile_pic.url }}" alt="Student Photo" 
-                                 class="img-thumbnail" style="max-width: 150px;">
-                        </div>
-                    </div>
-
-                    <h4>Examination Details</h4>
-                    <table class="table">
-                        <tr>
-                            <th>Exam Name:</th>
-                            <td>{{ hall_ticket.exam.exam_name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Date:</th>
-                            <td>{{ hall_ticket.exam.exam_date }}</td>
-                        </tr>
-                        <tr>
-                            <th>Time:</th>
-                            <td>{{ hall_ticket.exam.start_time }}</td>
-                        </tr>
-                        <tr>
-                            <th>Duration:</th>
-                            <td>{{ hall_ticket.exam.duration }} minutes</td>
-                        </tr>
-                        <tr>
-                            <th>Room Number:</th>
-                            <td>{{ hall_ticket.room_number }}</td>
-                        </tr>
-                        <tr>
-                            <th>Seat Number:</th>
-                            <td>{{ hall_ticket.seat_number }}</td>
-                        </tr>
-                        <tr>
-                            <th>Hall Ticket Number:</th>
-                            <td>{{ hall_ticket.hall_ticket_number }}</td>
-                        </tr>
-                    </table>
-
-                    <div class="alert alert-info">
-                        <strong>Important Instructions:</strong>
-                        <ul class="mb-0">
-                            <li>Please arrive 30 minutes before the examination start time</li>
-                            <li>Bring your ID card and this hall ticket</li>
-                            <li>No electronic devices allowed in the examination hall</li>
-                            <li>Follow all examination rules and regulations</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card-footer text-center">
-                    <button onclick="window.print()" class="btn btn-primary">
-                        <i class="fas fa-print"></i> Print Hall Ticket
-                    </button>
-                </div>
-            </div>
-            {% else %}
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <h4>No hall ticket found for upcoming examinations.</h4>
-                    <p>Please contact your administrator if you think this is an error.</p>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
 
 <style>
-@media print {
-    .navbar, .btn, footer {
-        display: none !important;
+    .hall-ticket {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 2px solid #333;
+        border-radius: 8px;
+        background: #fff;
     }
-    #hallTicket {
-        border: 1px solid #000;
+
+    .hall-ticket-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #333;
     }
-    .card-header {
-        background-color: #fff !important;
-        color: #000 !important;
-        border-bottom: 2px solid #000;
+
+    .hall-ticket-body {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
     }
-}
+
+    .info-group {
+        margin-bottom: 1rem;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .info-value {
+        margin-top: 0.25rem;
+    }
+
+    .exam-instructions {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .exam-type-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .exam-type-online {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .exam-type-offline {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .error-message {
+        text-align: center;
+        color: #d32f2f;
+        padding: 2rem;
+        background: #ffebee;
+        border-radius: 8px;
+        margin: 2rem auto;
+        max-width: 600px;
+    }
 </style>
+
+{% if error %}
+<div class="error-message">
+    {{ error }}
+</div>
+{% else %}
+<div class="hall-ticket">
+    <div class="hall-ticket-header">
+        <h2>Hall Ticket</h2>
+        <p>{{ exam.course.course_name }} - {{ exam.exam_name }}</p>
+        <div class="exam-type-badge {% if exam.exam_type == 'ONLINE' %}exam-type-online{% else %}exam-type-offline{% endif %}">
+            {{ exam.get_exam_type_display }}
+        </div>
+    </div>
+
+    <div class="hall-ticket-body">
+        <div class="info-group">
+            <div class="info-label">Student Name</div>
+            <div class="info-value">{{ student.get_name }}</div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Hall Ticket Number</div>
+            <div class="info-value">{{ allocation.hall_ticket_number }}</div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Course</div>
+            <div class="info-value">{{ exam.course.course_name }}</div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Exam Date</div>
+            <div class="info-value">{{ exam.exam_date }}</div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Start Time</div>
+            <div class="info-value">{{ exam.start_time }}</div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Duration</div>
+            <div class="info-value">{{ exam.duration }} minutes</div>
+        </div>
+
+        {% if exam.exam_type == 'OFFLINE' %}
+        <div class="info-group">
+            <div class="info-label">Room Number</div>
+            <div class="info-value">{{ allocation.room_number }}</div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-label">Seat Number</div>
+            <div class="info-value">{{ allocation.seat_number }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="exam-instructions">
+        <h4>Important Instructions:</h4>
+        <ul>
+            {% if exam.exam_type == 'ONLINE' %}
+            <li>Make sure you have a stable internet connection before starting the exam.</li>
+            <li>Log in at least 10 minutes before the exam start time.</li>
+            <li>Do not refresh the page or close the browser during the exam.</li>
+            <li>Your answers are automatically saved as you proceed.</li>
+            {% else %}
+            <li>Arrive at the examination hall at least 30 minutes before the start time.</li>
+            <li>Bring your hall ticket and a valid photo ID.</li>
+            <li>Electronic devices are not allowed in the examination hall.</li>
+            <li>Follow the instructions of the invigilator.</li>
+            {% endif %}
+            <li>Duration of the exam is {{ exam.duration }} minutes.</li>
+            <li>Read all questions carefully before answering.</li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}

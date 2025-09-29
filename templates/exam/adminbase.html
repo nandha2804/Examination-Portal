@@ -1,246 +1,78 @@
-<!DOCTYPE html>
+{% extends 'exam/navbar.html' %}
 {% load static %}
-<html lang="en" dir="ltr">
+{% load notification_tags %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --sidebar-width: 280px;
-            --header-height: 70px;
-            --primary-color: #4c51bf;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --surface-color: #ffffff;
-        }
+{% block custom_css %}
+<style>
+  .notification-bell {
+    position: relative;
+    cursor: pointer;
+  }
+  .notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 0.7rem;
+    padding: 0.25em 0.6em;
+  }
+</style>
+{% endblock %}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            min-height: 100vh;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            left: var(--sidebar-width);
-            right: 0;
-            height: var(--header-height);
-            background: var(--primary-gradient);
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: left 0.3s ease;
-        }
-
-        .header-title {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .logout_btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .logout_btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: white;
-            padding-top: 1.5rem;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            z-index: 101;
-        }
-
-        .profile-section {
-            text-align: center;
-            padding: 2rem 1rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .profile_image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-name {
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        .sidebar-nav {
-            padding: 1rem 0;
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .sidebar a:hover {
-            background-color: rgba(76, 81, 191, 0.1);
-            color: var(--primary-color);
-            padding-left: 2rem;
-        }
-
-        .sidebar a.active {
-            background-color: rgba(76, 81, 191, 0.1);
-            color: var(--primary-color);
-            border-right: 3px solid var(--primary-color);
-        }
-
-        .sidebar i {
-            margin-right: 0.75rem;
-            font-size: 1.25rem;
-            color: var(--primary-color);
-            opacity: 0.9;
-        }
-
-        .content {
-            margin-left: var(--sidebar-width);
-            margin-top: var(--header-height);
-            padding: 2rem;
-            min-height: calc(100vh - var(--header-height));
-            background-color: #f8fafc;
-            transition: margin-left 0.3s ease;
-        }
-
-        #sidebar_toggle {
-            display: none;
-        }
-
-        .toggle-sidebar {
-            display: none;
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .toggle-sidebar {
-                display: block;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            header {
-                left: 0;
-            }
-
-            .content {
-                margin-left: 0;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <header>
-        <div class="toggle-sidebar" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-        </div>
-        <h3 class="header-title">Examination Portal</h3>
-        <a href="/logout" class="logout_btn">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </header>
-
-    <div class="sidebar" id="sidebar">
-        <div class="profile-section">
-            <img src="{% static "image/admin.png" %}" class="profile_image" alt="Admin">
-            <h4 class="profile-name">Administrator</h4>
-        </div>
-
-        <nav class="sidebar-nav">
-            <a href="/admin-dashboard" class="{% if request.path == '/admin-dashboard' %}active{% endif %}">
-                <i class="fas fa-tachometer-alt"></i>Dashboard
-            </a>
-            <a href="/admin-teacher" class="{% if request.path == '/admin-teacher' %}active{% endif %}">
-                <i class="fas fa-chalkboard-teacher"></i>Teachers
-            </a>
-            <a href="/admin-student" class="{% if request.path == '/admin-student' %}active{% endif %}">
-                <i class="fas fa-user-graduate"></i>Students
-            </a>
-            <a href="/admin-course" class="{% if request.path == '/admin-course' %}active{% endif %}">
-                <i class="fas fa-book"></i>Courses
-            </a>
-            <a href="/admin-question" class="{% if request.path == '/admin-question' %}active{% endif %}">
-                <i class="fas fa-question-circle"></i>Questions
-            </a>
-        </nav>
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/admin-dashboard">Online Examination System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_teacher' %}">Teacher</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_student' %}">Student</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_course' %}">Course</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_question' %}">Question</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link notification-bell" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell"></i>
+            {% notification_badge request.user %}
+          </a>
+          {% recent_notifications request.user %}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+      </ul>
     </div>
+  </div>
+</nav>
+{% endblock %}
 
-    <div class="content">
-        {% block content %}
-        {% endblock content %}
-        {% include "exam/footer.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="list-group">
+        <a href="{% url 'admin_view_student' %}" class="list-group-item">View Student</a>
+        <a href="{% url 'admin_view_teacher' %}" class="list-group-item">View Teacher</a>
+        <a href="{% url 'admin_view_course' %}" class="list-group-item">View Course</a>
+        <a href="{% url 'admin_question' %}" class="list-group-item">View Question</a>
+        <a href="{% url 'admin_view_student_marks' %}" class="list-group-item">View Student Marks</a>
+      </div>
     </div>
-
-    <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-sidebar');
-            
-            if (window.innerWidth <= 768 && 
-                !sidebar.contains(event.target) && 
-                !toggleBtn.contains(event.target) &&
-                sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-            }
-        });
-    </script>
-</body>
-</html>
+    <div class="col-md-9">
+      {% block dashboard_content %}
+      {% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

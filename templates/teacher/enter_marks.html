@@ -1,0 +1,104 @@
+{% extends 'teacher/teacherbase.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Enter Marks - {{ exam.exam_name }}</h2>
+            <p class="text-muted">
+                Course: {{ exam.course.course_name }} | 
+                Date: {{ exam.exam_date }} | 
+                Total Marks: {{ exam.course.total_marks }}
+            </p>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="post" id="marksForm">
+                {% csrf_token %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Roll Number</th>
+                                <th>Marks</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.get_name }}</td>
+                                <td>{{ student.user.username }}</td>
+                                <td>
+                                    <input 
+                                        type="number" 
+                                        name="marks_{{ student.id }}" 
+                                        class="form-control" 
+                                        min="0" 
+                                        max="{{ exam.course.total_marks }}"
+                                        value="{% if student.exam_result %}{{ student.exam_result.0.marks }}{% endif %}"
+                                        required
+                                    >
+                                </td>
+                                <td>
+                                    {% if student.exam_result %}
+                                        <span class="badge badge-{{ student.exam_result.0.status|lower }}">
+                                            {{ student.exam_result.0.status }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">Not Entered</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Marks
+                    </button>
+                    <a href="{% url 'teacher-result-entry' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge-pending { background-color: #fbd38d; color: #744210; }
+.badge-approved { background-color: #9ae6b4; color: #22543d; }
+.badge-rejected { background-color: #feb2b2; color: #822727; }
+</style>
+
+<script>
+document.getElementById('marksForm').addEventListener('submit', function(e) {
+    const inputs = this.querySelectorAll('input[type="number"]');
+    let hasError = false;
+    
+    inputs.forEach(input => {
+        const value = parseInt(input.value);
+        const max = parseInt(input.getAttribute('max'));
+        
+        if (value > max) {
+            alert('Marks cannot exceed total marks!');
+            input.focus();
+            hasError = true;
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    if (!hasError && !confirm('Are you sure you want to submit these marks?')) {
+        e.preventDefault();
+    }
+});
+</script>
+
+{% endblock content %}

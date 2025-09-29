@@ -1,0 +1,37 @@
+{% extends 'exam/base.html' %}
+{% block title %}Teacher Login{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <h2 class="mb-4">Teacher Login</h2>
+            <div class="card">
+                <img src="{% static 'image/teacher.png' %}" class="card-img-top mx-auto mt-3" style="width: 150px;" alt="Teacher Icon">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome Teacher</h5>
+                    <p class="card-text">Access your teaching dashboard, manage exams, and view student results.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'teacherlogin' %}" class="btn btn-primary">
+                            Login to Teacher Panel
+                        </a>
+                        <a href="{% url 'teachersignup' %}" class="btn btn-outline-primary">
+                            Register as New Teacher
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <p class="mb-0">Teacher Features:</p>
+                    <ul class="list-unstyled">
+                        <li>Create and Manage Exams</li>
+                        <li>Add Questions</li>
+                        <li>View Student Performance</li>
+                        <li>Grade Submissions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
